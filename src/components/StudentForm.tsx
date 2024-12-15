@@ -1,17 +1,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import type { StudentRecord } from "@/types";
 import { useData } from "./DataContext";
+import { SelectField } from "./form/SelectField";
+import { InputField } from "./form/InputField";
 
 export const StudentForm = ({ 
   onSubmit 
@@ -84,190 +78,106 @@ export const StudentForm = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto p-6 bg-white rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Group Leader</label>
-          <Select
-            value={formData.groupLeader}
-            onValueChange={(value) => {
-              if (value === "new") return;
-              setFormData({ ...formData, groupLeader: value });
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Group Leader" />
-            </SelectTrigger>
-            <SelectContent>
-              {groupLeaders.map((leader) => (
-                <SelectItem key={leader} value={leader}>
-                  {leader}
-                </SelectItem>
-              ))}
-              <SelectItem value="new">+ Add New Leader</SelectItem>
-            </SelectContent>
-          </Select>
-          {formData.groupLeader === "new" && (
-            <div className="flex gap-2 mt-2">
-              <Input
-                value={newGroupLeader}
-                onChange={(e) => setNewGroupLeader(e.target.value)}
-                placeholder="Enter new leader name"
-              />
-              <Button type="button" onClick={handleNewGroupLeader}>Add</Button>
-            </div>
-          )}
-        </div>
+        <SelectField
+          label="Group Leader"
+          value={formData.groupLeader || ""}
+          options={groupLeaders}
+          placeholder="Select Group Leader"
+          onValueChange={(value) => setFormData({ ...formData, groupLeader: value })}
+          onNewValueAdd={handleNewGroupLeader}
+          newValue={newGroupLeader}
+          onNewValueChange={setNewGroupLeader}
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Assistant Leader</label>
-          <Select
-            value={formData.assistantLeader}
-            onValueChange={(value) => {
-              if (value === "new") return;
-              setFormData({ ...formData, assistantLeader: value });
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Assistant Leader" />
-            </SelectTrigger>
-            <SelectContent>
-              {assistantLeaders.map((leader) => (
-                <SelectItem key={leader} value={leader}>
-                  {leader}
-                </SelectItem>
-              ))}
-              <SelectItem value="new">+ Add New Assistant</SelectItem>
-            </SelectContent>
-          </Select>
-          {formData.assistantLeader === "new" && (
-            <div className="flex gap-2 mt-2">
-              <Input
-                value={newAssistantLeader}
-                onChange={(e) => setNewAssistantLeader(e.target.value)}
-                placeholder="Enter new assistant name"
-              />
-              <Button type="button" onClick={handleNewAssistantLeader}>Add</Button>
-            </div>
-          )}
-        </div>
+        <SelectField
+          label="Assistant Leader"
+          value={formData.assistantLeader || ""}
+          options={assistantLeaders}
+          placeholder="Select Assistant Leader"
+          onValueChange={(value) => setFormData({ ...formData, assistantLeader: value })}
+          onNewValueAdd={handleNewAssistantLeader}
+          newValue={newAssistantLeader}
+          onNewValueChange={setNewAssistantLeader}
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Area</label>
-          <Select
-            value={formData.area}
-            onValueChange={(value) => {
-              if (value === "new") return;
-              setFormData({ ...formData, area: value });
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Area" />
-            </SelectTrigger>
-            <SelectContent>
-              {areas.map((area) => (
-                <SelectItem key={area} value={area}>
-                  {area}
-                </SelectItem>
-              ))}
-              <SelectItem value="new">+ Add New Area</SelectItem>
-            </SelectContent>
-          </Select>
-          {formData.area === "new" && (
-            <div className="flex gap-2 mt-2">
-              <Input
-                value={newArea}
-                onChange={(e) => setNewArea(e.target.value)}
-                placeholder="Enter new area name"
-              />
-              <Button type="button" onClick={handleNewArea}>Add</Button>
-            </div>
-          )}
-        </div>
+        <SelectField
+          label="Area"
+          value={formData.area || ""}
+          options={areas}
+          placeholder="Select Area"
+          onValueChange={(value) => setFormData({ ...formData, area: value })}
+          onNewValueAdd={handleNewArea}
+          newValue={newArea}
+          onNewValueChange={setNewArea}
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Sheet No.</label>
-          <Input
-            value={formData.sheetNo || ""}
-            onChange={(e) => setFormData({ ...formData, sheetNo: e.target.value })}
-            placeholder="Sheet Number"
-          />
-        </div>
+        <InputField
+          label="Sheet No."
+          value={formData.sheetNo || ""}
+          onChange={(value) => setFormData({ ...formData, sheetNo: value })}
+          placeholder="Sheet Number"
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Student Name *</label>
-          <Input
-            value={formData.studentName || ""}
-            onChange={(e) => setFormData({ ...formData, studentName: e.target.value })}
-            placeholder="Student Name"
-            required
-          />
-        </div>
+        <InputField
+          label="Student Name"
+          value={formData.studentName || ""}
+          onChange={(value) => setFormData({ ...formData, studentName: value })}
+          placeholder="Student Name"
+          required
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Year</label>
-          <Input
-            value={formData.year || ""}
-            onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-            placeholder="Year"
-          />
-        </div>
+        <InputField
+          label="Year"
+          value={formData.year || ""}
+          onChange={(value) => setFormData({ ...formData, year: value })}
+          placeholder="Year"
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Class *</label>
-          <Input
-            value={formData.class || ""}
-            onChange={(e) => setFormData({ ...formData, class: e.target.value })}
-            placeholder="Class"
-            required
-          />
-        </div>
+        <InputField
+          label="Class"
+          value={formData.class || ""}
+          onChange={(value) => setFormData({ ...formData, class: value })}
+          placeholder="Class"
+          required
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Guardian Name</label>
-          <Input
-            value={formData.guardianName || ""}
-            onChange={(e) => setFormData({ ...formData, guardianName: e.target.value })}
-            placeholder="Guardian Name"
-          />
-        </div>
+        <InputField
+          label="Guardian Name"
+          value={formData.guardianName || ""}
+          onChange={(value) => setFormData({ ...formData, guardianName: value })}
+          placeholder="Guardian Name"
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Address</label>
-          <Input
-            value={formData.address || ""}
-            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-            placeholder="Address"
-          />
-        </div>
+        <InputField
+          label="Address"
+          value={formData.address || ""}
+          onChange={(value) => setFormData({ ...formData, address: value })}
+          placeholder="Address"
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Contact</label>
-          <Input
-            value={formData.contact || ""}
-            onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-            placeholder="Phone/WhatsApp"
-          />
-        </div>
+        <InputField
+          label="Contact"
+          value={formData.contact || ""}
+          onChange={(value) => setFormData({ ...formData, contact: value })}
+          placeholder="Phone/WhatsApp"
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Demo</label>
-          <Input
-            value={formData.demo || ""}
-            onChange={(e) => setFormData({ ...formData, demo: e.target.value })}
-            placeholder="Demo"
-          />
-        </div>
+        <InputField
+          label="Demo"
+          value={formData.demo || ""}
+          onChange={(value) => setFormData({ ...formData, demo: value })}
+          placeholder="Demo"
+        />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Result (%)</label>
-          <Input
-            type="number"
-            min="0"
-            max="100"
-            value={formData.result || ""}
-            onChange={(e) => setFormData({ ...formData, result: e.target.value })}
-            placeholder="Result Percentage"
-          />
-        </div>
+        <InputField
+          label="Result (%)"
+          value={formData.result || ""}
+          onChange={(value) => setFormData({ ...formData, result: value })}
+          placeholder="Result Percentage"
+          type="number"
+          min="0"
+          max="100"
+        />
 
         <div className="flex items-center space-x-2">
           <Checkbox
