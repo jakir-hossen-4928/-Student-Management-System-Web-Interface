@@ -55,7 +55,7 @@ export const SelectField = ({
             type="button" 
             onClick={() => {
               if (newValue.trim()) {
-                onNewValueAdd();
+                onNewValueAdd(newValue);
               }
             }}
           >
