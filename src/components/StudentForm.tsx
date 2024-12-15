@@ -3,7 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { StudentRecord } from "@/types";
+import { useData } from "./DataContext";
 
 export const StudentForm = ({ 
   onSubmit 
@@ -12,6 +20,7 @@ export const StudentForm = ({
 }) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState<Partial<StudentRecord>>({});
+  const { areas, groupLeaders, assistantLeaders, addArea, addGroupLeader, addAssistantLeader } = useData();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +32,11 @@ export const StudentForm = ({
       });
       return;
     }
+
+    // Add new items to context if they don't exist
+    if (formData.area) addArea(formData.area);
+    if (formData.groupLeader) addGroupLeader(formData.groupLeader);
+    if (formData.assistantLeader) addAssistantLeader(formData.assistantLeader);
 
     onSubmit({
       id: Date.now().toString(),
@@ -42,20 +56,60 @@ export const StudentForm = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="text-sm font-medium">Group Leader</label>
-          <Input
-            value={formData.groupLeader || ""}
-            onChange={(e) => setFormData({ ...formData, groupLeader: e.target.value })}
-            placeholder="Group Leader Name"
-          />
+          <Select
+            value={formData.groupLeader}
+            onValueChange={(value) => setFormData({ ...formData, groupLeader: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select Group Leader" />
+            </SelectTrigger>
+            <SelectContent>
+              {groupLeaders.map((leader) => (
+                <SelectItem key={leader} value={leader}>
+                  {leader}
+                </SelectItem>
+              ))}
+              <SelectItem value="new">+ Add New Leader</SelectItem>
+            </SelectContent>
+          </Select>
+          {formData.groupLeader === "new" && (
+            <Input
+              value=""
+              onChange={(e) => setFormData({ ...formData, groupLeader: e.target.value })}
+              placeholder="Enter new leader name"
+              className="mt-2"
+            />
+          )}
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Assistant Leader</label>
-          <Input
-            value={formData.assistantLeader || ""}
-            onChange={(e) => setFormData({ ...formData, assistantLeader: e.target.value })}
-            placeholder="Assistant Leader Name"
-          />
+          <Select
+            value={formData.assistantLeader}
+            onValueChange={(value) => setFormData({ ...formData, assistantLeader: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select Assistant Leader" />
+            </SelectTrigger>
+            <SelectContent>
+              {assistantLeaders.map((leader) => (
+                <SelectItem key={leader} value={leader}>
+                  {leader}
+                </SelectItem>
+              ))}
+              <SelectItem value="new">+ Add New Assistant</SelectItem>
+            </SelectContent>
+          </Select>
+          {formData.assistantLeader === "new" && (
+            <Input
+              value=""
+              onChange={(e) => setFormData({ ...formData, assistantLeader: e.target.value })}
+              placeholder="Enter new assistant name"
+              className="mt-2"
+            />
+          )}
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Date</label>
           <Input
@@ -64,14 +118,35 @@ export const StudentForm = ({
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           />
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Area</label>
-          <Input
-            value={formData.area || ""}
-            onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-            placeholder="Area"
-          />
+          <Select
+            value={formData.area}
+            onValueChange={(value) => setFormData({ ...formData, area: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select Area" />
+            </SelectTrigger>
+            <SelectContent>
+              {areas.map((area) => (
+                <SelectItem key={area} value={area}>
+                  {area}
+                </SelectItem>
+              ))}
+              <SelectItem value="new">+ Add New Area</SelectItem>
+            </SelectContent>
+          </Select>
+          {formData.area === "new" && (
+            <Input
+              value=""
+              onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+              placeholder="Enter new area name"
+              className="mt-2"
+            />
+          )}
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Sheet No.</label>
           <Input
@@ -80,6 +155,7 @@ export const StudentForm = ({
             placeholder="Sheet Number"
           />
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Student Name *</label>
           <Input
@@ -89,6 +165,7 @@ export const StudentForm = ({
             required
           />
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Year</label>
           <Input
@@ -97,6 +174,7 @@ export const StudentForm = ({
             placeholder="Year"
           />
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Class *</label>
           <Input
@@ -106,6 +184,7 @@ export const StudentForm = ({
             required
           />
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Guardian Name</label>
           <Input
@@ -114,6 +193,7 @@ export const StudentForm = ({
             placeholder="Guardian Name"
           />
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Address</label>
           <Input
@@ -122,6 +202,7 @@ export const StudentForm = ({
             placeholder="Address"
           />
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Contact</label>
           <Input
@@ -130,6 +211,7 @@ export const StudentForm = ({
             placeholder="Phone/WhatsApp"
           />
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Demo</label>
           <Input
@@ -138,6 +220,7 @@ export const StudentForm = ({
             placeholder="Demo"
           />
         </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Result (%)</label>
           <Input
@@ -149,6 +232,7 @@ export const StudentForm = ({
             placeholder="Result Percentage"
           />
         </div>
+
         <div className="flex items-center space-x-2">
           <Checkbox
             id="seminar"
