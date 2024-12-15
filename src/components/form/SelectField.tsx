@@ -28,10 +28,7 @@ export const SelectField = ({
       <label className="text-sm font-medium">{label}</label>
       <Select
         value={value}
-        onValueChange={(value) => {
-          if (value === "new") return;
-          onValueChange(value);
-        }}
+        onValueChange={onValueChange}
       >
         <SelectTrigger>
           <SelectValue placeholder={placeholder} />
@@ -42,7 +39,9 @@ export const SelectField = ({
               {option}
             </SelectItem>
           ))}
-          {onNewValueAdd && <SelectItem value="new">+ Add New</SelectItem>}
+          {onNewValueAdd && (
+            <SelectItem value="new">+ Add New</SelectItem>
+          )}
         </SelectContent>
       </Select>
       {value === "new" && onNewValueAdd && onNewValueChange && (
@@ -52,7 +51,14 @@ export const SelectField = ({
             onChange={(e) => onNewValueChange(e.target.value)}
             placeholder={`Enter new ${label.toLowerCase()}`}
           />
-          <Button type="button" onClick={() => onNewValueAdd(newValue)}>
+          <Button 
+            type="button" 
+            onClick={() => {
+              if (newValue.trim()) {
+                onNewValueAdd();
+              }
+            }}
+          >
             Add
           </Button>
         </div>

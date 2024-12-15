@@ -52,26 +52,38 @@ export const StudentForm = ({
   };
 
   const handleNewGroupLeader = () => {
-    if (newGroupLeader) {
+    if (newGroupLeader.trim()) {
       addGroupLeader(newGroupLeader);
       setFormData({ ...formData, groupLeader: newGroupLeader });
       setNewGroupLeader("");
+      toast({
+        title: "Success",
+        description: "New group leader added successfully",
+      });
     }
   };
 
   const handleNewAssistantLeader = () => {
-    if (newAssistantLeader) {
+    if (newAssistantLeader.trim()) {
       addAssistantLeader(newAssistantLeader);
       setFormData({ ...formData, assistantLeader: newAssistantLeader });
       setNewAssistantLeader("");
+      toast({
+        title: "Success",
+        description: "New assistant leader added successfully",
+      });
     }
   };
 
   const handleNewArea = () => {
-    if (newArea) {
+    if (newArea.trim()) {
       addArea(newArea);
       setFormData({ ...formData, area: newArea });
       setNewArea("");
+      toast({
+        title: "Success",
+        description: "New area added successfully",
+      });
     }
   };
 
