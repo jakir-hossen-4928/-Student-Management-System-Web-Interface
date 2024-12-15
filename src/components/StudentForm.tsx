@@ -20,7 +20,18 @@ export const StudentForm = ({
 }) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState<Partial<StudentRecord>>({});
-  const { areas, groupLeaders, assistantLeaders, addArea, addGroupLeader, addAssistantLeader } = useData();
+  const [newGroupLeader, setNewGroupLeader] = useState("");
+  const [newAssistantLeader, setNewAssistantLeader] = useState("");
+  const [newArea, setNewArea] = useState("");
+  
+  const { 
+    areas, 
+    groupLeaders, 
+    assistantLeaders, 
+    addArea, 
+    addGroupLeader, 
+    addAssistantLeader 
+  } = useData();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,11 +43,6 @@ export const StudentForm = ({
       });
       return;
     }
-
-    // Add new items to context if they don't exist
-    if (formData.area) addArea(formData.area);
-    if (formData.groupLeader) addGroupLeader(formData.groupLeader);
-    if (formData.assistantLeader) addAssistantLeader(formData.assistantLeader);
 
     onSubmit({
       id: Date.now().toString(),
@@ -51,14 +57,41 @@ export const StudentForm = ({
     });
   };
 
+  const handleNewGroupLeader = () => {
+    if (newGroupLeader) {
+      addGroupLeader(newGroupLeader);
+      setFormData({ ...formData, groupLeader: newGroupLeader });
+      setNewGroupLeader("");
+    }
+  };
+
+  const handleNewAssistantLeader = () => {
+    if (newAssistantLeader) {
+      addAssistantLeader(newAssistantLeader);
+      setFormData({ ...formData, assistantLeader: newAssistantLeader });
+      setNewAssistantLeader("");
+    }
+  };
+
+  const handleNewArea = () => {
+    if (newArea) {
+      addArea(newArea);
+      setFormData({ ...formData, area: newArea });
+      setNewArea("");
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto p-6 bg-white rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="text-sm font-medium">Group Leader</label>
           <Select
             value={formData.groupLeader}
-            onValueChange={(value) => setFormData({ ...formData, groupLeader: value })}
+            onValueChange={(value) => {
+              if (value === "new") return;
+              setFormData({ ...formData, groupLeader: value });
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Group Leader" />
@@ -73,12 +106,14 @@ export const StudentForm = ({
             </SelectContent>
           </Select>
           {formData.groupLeader === "new" && (
-            <Input
-              value=""
-              onChange={(e) => setFormData({ ...formData, groupLeader: e.target.value })}
-              placeholder="Enter new leader name"
-              className="mt-2"
-            />
+            <div className="flex gap-2 mt-2">
+              <Input
+                value={newGroupLeader}
+                onChange={(e) => setNewGroupLeader(e.target.value)}
+                placeholder="Enter new leader name"
+              />
+              <Button type="button" onClick={handleNewGroupLeader}>Add</Button>
+            </div>
           )}
         </div>
 
@@ -86,7 +121,10 @@ export const StudentForm = ({
           <label className="text-sm font-medium">Assistant Leader</label>
           <Select
             value={formData.assistantLeader}
-            onValueChange={(value) => setFormData({ ...formData, assistantLeader: value })}
+            onValueChange={(value) => {
+              if (value === "new") return;
+              setFormData({ ...formData, assistantLeader: value });
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Assistant Leader" />
@@ -101,29 +139,25 @@ export const StudentForm = ({
             </SelectContent>
           </Select>
           {formData.assistantLeader === "new" && (
-            <Input
-              value=""
-              onChange={(e) => setFormData({ ...formData, assistantLeader: e.target.value })}
-              placeholder="Enter new assistant name"
-              className="mt-2"
-            />
+            <div className="flex gap-2 mt-2">
+              <Input
+                value={newAssistantLeader}
+                onChange={(e) => setNewAssistantLeader(e.target.value)}
+                placeholder="Enter new assistant name"
+              />
+              <Button type="button" onClick={handleNewAssistantLeader}>Add</Button>
+            </div>
           )}
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Date</label>
-          <Input
-            type="date"
-            value={formData.date || ""}
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-          />
         </div>
 
         <div className="space-y-2">
           <label className="text-sm font-medium">Area</label>
           <Select
             value={formData.area}
-            onValueChange={(value) => setFormData({ ...formData, area: value })}
+            onValueChange={(value) => {
+              if (value === "new") return;
+              setFormData({ ...formData, area: value });
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Area" />
@@ -138,12 +172,14 @@ export const StudentForm = ({
             </SelectContent>
           </Select>
           {formData.area === "new" && (
-            <Input
-              value=""
-              onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-              placeholder="Enter new area name"
-              className="mt-2"
-            />
+            <div className="flex gap-2 mt-2">
+              <Input
+                value={newArea}
+                onChange={(e) => setNewArea(e.target.value)}
+                placeholder="Enter new area name"
+              />
+              <Button type="button" onClick={handleNewArea}>Add</Button>
+            </div>
           )}
         </div>
 
