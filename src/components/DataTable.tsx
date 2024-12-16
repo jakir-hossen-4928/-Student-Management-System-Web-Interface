@@ -16,9 +16,7 @@ export const DataTable = ({ data }: { data: StudentRecord[] }) => {
           <TableRow>
             <TableHead>Group Leader</TableHead>
             <TableHead>Assistant Leader</TableHead>
-            <TableHead>Date</TableHead>
             <TableHead>Area</TableHead>
-            <TableHead>Sheet No.</TableHead>
             <TableHead>Student Name</TableHead>
             <TableHead>Year</TableHead>
             <TableHead>Class</TableHead>
@@ -35,9 +33,7 @@ export const DataTable = ({ data }: { data: StudentRecord[] }) => {
             <TableRow key={record.id}>
               <TableCell>{record.groupLeader}</TableCell>
               <TableCell>{record.assistantLeader}</TableCell>
-              <TableCell>{record.date}</TableCell>
               <TableCell>{record.area}</TableCell>
-              <TableCell>{record.sheetNo}</TableCell>
               <TableCell>{record.studentName}</TableCell>
               <TableCell>{record.year}</TableCell>
               <TableCell>{record.class}</TableCell>

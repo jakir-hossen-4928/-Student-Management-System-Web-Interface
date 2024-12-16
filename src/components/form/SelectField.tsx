@@ -8,9 +8,11 @@ interface SelectFieldProps {
   options: string[];
   placeholder: string;
   onValueChange: (value: string) => void;
-  onNewValueAdd?: (value: string) => void;
+  onNewValueAdd?: () => void;
   newValue?: string;
   onNewValueChange?: (value: string) => void;
+  error?: string;
+  required?: boolean;
 }
 
 export const SelectField = ({
@@ -22,15 +24,19 @@ export const SelectField = ({
   onNewValueAdd,
   newValue = "",
   onNewValueChange,
+  error,
+  required = false,
 }: SelectFieldProps) => {
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium">{label}</label>
+      <label className="text-sm font-medium">
+        {label} {required && "*"}
+      </label>
       <Select
         value={value}
         onValueChange={onValueChange}
       >
-        <SelectTrigger>
+        <SelectTrigger className={error ? "border-red-500" : ""}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
@@ -50,19 +56,17 @@ export const SelectField = ({
             value={newValue}
             onChange={(e) => onNewValueChange(e.target.value)}
             placeholder={`Enter new ${label.toLowerCase()}`}
+            className={error ? "border-red-500" : ""}
           />
           <Button 
             type="button" 
-            onClick={() => {
-              if (newValue.trim()) {
-                onNewValueAdd(newValue);
-              }
-            }}
+            onClick={onNewValueAdd}
           >
             Add
           </Button>
         </div>
       )}
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 };

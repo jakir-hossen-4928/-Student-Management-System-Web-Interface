@@ -49,6 +49,8 @@ export const FormFields = ({
         onNewValueAdd={handleNewGroupLeader}
         newValue={newGroupLeader}
         onNewValueChange={setNewGroupLeader}
+        error={errors.groupLeader}
+        required
       />
 
       <SelectField
@@ -60,6 +62,8 @@ export const FormFields = ({
         onNewValueAdd={handleNewAssistantLeader}
         newValue={newAssistantLeader}
         onNewValueChange={setNewAssistantLeader}
+        error={errors.assistantLeader}
+        required
       />
 
       <SelectField
@@ -71,6 +75,8 @@ export const FormFields = ({
         onNewValueAdd={handleNewArea}
         newValue={newArea}
         onNewValueChange={setNewArea}
+        error={errors.area}
+        required
       />
 
       <InputField
@@ -86,7 +92,9 @@ export const FormFields = ({
         label="Year"
         value={formData.year || ""}
         onChange={(value) => setFormData({ ...formData, year: value })}
-        placeholder="Year"
+        placeholder="YYYY"
+        required
+        error={errors.year}
       />
 
       <InputField
@@ -112,6 +120,8 @@ export const FormFields = ({
         value={formData.address || ""}
         onChange={(value) => setFormData({ ...formData, address: value })}
         placeholder="Address"
+        required
+        error={errors.address}
       />
 
       <InputField
@@ -119,6 +129,7 @@ export const FormFields = ({
         value={formData.contact || ""}
         onChange={(value) => setFormData({ ...formData, contact: value })}
         placeholder="Phone/WhatsApp"
+        required
         error={errors.contact}
       />
 
@@ -127,6 +138,8 @@ export const FormFields = ({
         value={formData.demo || ""}
         onChange={(value) => setFormData({ ...formData, demo: value })}
         placeholder="Demo"
+        required
+        error={errors.demo}
       />
 
       <InputField
@@ -137,6 +150,7 @@ export const FormFields = ({
         type="number"
         min="0"
         max="100"
+        required
         error={errors.result}
       />
 
