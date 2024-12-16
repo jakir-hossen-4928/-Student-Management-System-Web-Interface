@@ -2,9 +2,7 @@ export interface StudentRecord {
   id: string;
   groupLeader: string;
   assistantLeader: string;
-  date: string;
   area: string;
-  sheetNo: string;
   studentName: string;
   year: string;
   class: string;

@@ -9,6 +9,7 @@ interface InputFieldProps {
   type?: string;
   min?: string;
   max?: string;
+  error?: string;
 }
 
 export const InputField = ({
@@ -20,6 +21,7 @@ export const InputField = ({
   type = "text",
   min,
   max,
+  error,
 }: InputFieldProps) => {
   return (
     <div className="space-y-2">
@@ -34,7 +36,9 @@ export const InputField = ({
         required={required}
         min={min}
         max={max}
+        className={error ? "border-red-500" : ""}
       />
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 };
